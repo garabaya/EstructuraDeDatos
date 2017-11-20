@@ -3,49 +3,50 @@ package listaDoblementeEnlazada;
 public class ProgramaReceta {
 
 	public static void main(String[] args) {
-		Node paso = new Node("Encender el horno");
-		//Inicializar la lista de pasos de una receta con el primer paso
-		ListaDobEnl receta = new ListaDobEnl(paso);
 		
-		//Añadir nodos a la lista
+		//Inicializar la lista de pasos de una receta
+		ListaDobEnl receta = new ListaDobEnl();//lista vacÃ­a
+		
+		//AÃ±adir nodos a la lista
+		receta.addNode(new Node("Encender el horno"));
 		receta.addNode(new Node("Sacar la pizza de la nevera"));
 		receta.addNode(new Node("Meter la pizza en el horno"));
 		receta.addNode(new Node("Sacar la pizza del horno"));
 		receta.addNode(new Node("Apagar el horno"));
 
-		//Contar el número de elementos que tiene la lista
+		//Contar el nÃºmero de elementos que tiene la lista
 		System.out.println("Contar los pasos de la receta");
 		System.out.println("Esta receta tiene "+receta.getCount()+ " pasos");
 		System.out.println();
 		
-		//Mostrar el elemento que hay en una posición concreta de la lista
+		//Mostrar el elemento que hay en una posiciÃ³n concreta de la lista
 		int pos=2;
 		System.out.println("Mostrar el paso "+pos);
-		paso = receta.getNode(pos);
+		Node paso = receta.getNode(pos);
 		if (paso!=null) {
 			System.out.println("El paso "+pos+" es: "+paso.getText());
 		}else {
 			System.out.println("No existe el paso "+pos);
 		}
 		System.out.println();
-		//Comprobar si un elemento está en la lista (por posición)
+		//Comprobar si un elemento estÃ¡ en la lista (por posiciÃ³n)
 		pos=1;
 		System.out.println("Comprobar si existe el paso "+pos);
 		paso = receta.getNode(pos);
 		if (paso!=null) {
-			System.out.println("Sí existe el paso "+pos);
+			System.out.println("SÃ­ existe el paso "+pos);
 		}else {
 			System.out.println("No existe el paso "+pos);
 		}
 		System.out.println();
-		//Comprobar si un elemento está en la lista (por texto)
+		//Comprobar si un elemento estÃ¡ en la lista (por texto)
 		String texto="Echar mostaza a la pizza";
 		System.out.println("Comprobar si existe el paso: "+texto);
 		int posicion = receta.getPosition(texto);
 		if (posicion>=0) {
-			System.out.println(texto+" sí está en la receta");
+			System.out.println(texto+" sÃ­ estÃ¡ en la receta");
 		}else {
-			System.out.println(texto+" no está en la receta");
+			System.out.println(texto+" no estÃ¡ en la receta");
 		}
 		System.out.println();
 		
@@ -55,7 +56,7 @@ public class ProgramaReceta {
 		System.out.println();
 		
 		//Insertar un elemento nuevo
-		System.out.println("Hemos añadido un paso al final y otro en la posición 1:");
+		System.out.println("Hemos aÃ±adido un paso al final y otro en la posiciÃ³n 1:");
 		receta.addNode(new Node("Comerse la pizza"));
 		receta.addNode(1,new Node("Abrir la nevera"));
 		receta.printList();
@@ -70,7 +71,7 @@ public class ProgramaReceta {
 		receta.printList();
 		System.out.println();
 		
-		//Sacar el elemento que ocupa una posición en la lista
+		//Sacar el elemento que ocupa una posiciÃ³n en la lista
 		receta.deleteNode(2);
 		System.out.println("Paso eliminado: "+2);
 		System.out.println();
@@ -79,11 +80,11 @@ public class ProgramaReceta {
 		System.out.println();
 		
 		//Concatenar dos listas
-		Node pasoCafe = new Node("Calentar café");
+		Node pasoCafe = new Node("Calentar cafÃ©");
 		ListaDobEnl recetaCafe = new ListaDobEnl(pasoCafe);
-		recetaCafe.addNode(new Node("Echar azúcar"));
-		recetaCafe.addNode(new Node("Tomarse el café"));
-		System.out.println("Receta de café:");
+		recetaCafe.addNode(new Node("Echar azÃºcar"));
+		recetaCafe.addNode(new Node("Tomarse el cafÃ©"));
+		System.out.println("Receta de cafÃ©:");
 		recetaCafe.printList();
 		System.out.println();
 		System.out.println("Recetas concatenadas:");
@@ -92,8 +93,8 @@ public class ProgramaReceta {
 		System.out.println();
 		
 		//Reemplazar un elemento de la lista
-		listaConcatenada.replace(listaConcatenada.getPosition("Echar azúcar"), new Node("Echar sacarina"));
-		System.out.println("Cambiando el azúcar por sacarina:");
+		listaConcatenada.replace(listaConcatenada.getPosition("Echar azÃºcar"), new Node("Echar sacarina"));
+		System.out.println("Cambiando el azÃºcar por sacarina:");
 		listaConcatenada.printList();
 		
 		

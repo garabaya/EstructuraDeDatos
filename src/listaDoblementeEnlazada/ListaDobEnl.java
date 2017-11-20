@@ -1,15 +1,23 @@
 package listaDoblementeEnlazada;
-/*
+/**
 * La clase ListaDobEnl es una lista doblemente enlazada
-*/
+**/
 public class ListaDobEnl {
 	private Node first;//primer nodo
 	private Node last;//ultimo nodo
 	private int count;//contador de nodos
 	
+	
+	//Constructor
+	public ListaDobEnl() {
+		this.first=null;
+		this.last=null;
+		this.count=0;
+	}
+
 	//El constructor inicializa la lista con un nodo
 	public ListaDobEnl(Node primero) {
-		//El único nodo es el primero y último a la vez
+		//El Ãºnico nodo es el primero y Ãºltimo a la vez
 		this.first = primero;
 		this.last = primero;
 		this.count=1;//La lista se inicializa con un nodo
@@ -35,41 +43,56 @@ public class ListaDobEnl {
 	public int getCount() {
 		return count;
 	}
-	/*
-	 * Añade un nodo al final
-	 */
+	/**
+	 * AÃ±ade un nodo al final
+	 **/
 	public void addNode(Node nodo) {
-		nodo.setPrev(this.last);
-		this.last.setNext(nodo);
-		this.last=nodo;
+		if (this.first==null) {
+			this.first=nodo;
+			this.last=nodo;
+		}else {
+			nodo.setPrev(this.last);
+			this.last.setNext(nodo);
+			this.last=nodo;
+		}
+		
 		this.count++;
 	}
-	/* 
-	 * Añade un nodo al principio
-	 */
+	/** 
+	 * AÃ±ade un nodo al principio
+	 **/
 	private void addFirstNode(Node nodo) {
-		this.first.setPrev(nodo);
-		this.first=nodo;
-		this.count++;
+		if (this.first==null) {
+			addNode(nodo);
+		}else {
+			this.first.setPrev(nodo);
+			this.first=nodo;
+			this.count++;
+		}
 	}
-	/* 
-	 * Añade un nodo en la posición indicada
-	 */
+	/** 
+	 * AÃ±ade un nodo en la posiciÃ³n indicada
+	 **/
 	public void addNode(int pos,Node nodo) {
 		if (pos==0) addFirstNode(nodo);
 		else if (pos==this.count) addNode(nodo);
 		else if (pos>0 && pos<this.count) {
-			nodo.setPrev(this.getNode(pos-1));
-			nodo.setNext(this.getNode(pos));
-			this.getNode(pos).setPrev(nodo);
-			this.getNode(pos-1).setNext(nodo);
+			Node anterior = this.getNode(pos-1);
+			Node posterior = this.getNode(pos);
+			nodo.setPrev(anterior);
+			nodo.setNext(posterior);
+			anterior.setNext(nodo);
+			posterior.setPrev(nodo);
 			this.count++;
 		}
 	}
-	/*
-	* Método que devuelve la posición cuyo texto conincida con la String pasada
-	*/
+	/**
+	* MÃ©todo que devuelve la posiciÃ³n cuyo texto conincida con la String pasada
+	**/
 	public int getPosition(String texto) {
+		if (this.first==null) {
+			return -1;
+		}
 		//Recorremos la lista nodo a nodo para buscar el nodo con el texto indicado
 		int pos=0;
 		boolean encontrado=false;
@@ -86,14 +109,14 @@ public class ListaDobEnl {
 		if (encontrado) return pos;
 		else return -1;//Si no se encuentra el elemento devuelve -1
 	}
-	/*
-	 * Método que devuelve el nodo en la posición indicada
-	 */
+	/**
+	 * MÃ©todo que devuelve el nodo en la posiciÃ³n indicada
+	 **/
 	public Node getNode(int posicion) {
-		if (posicion>=this.count || posicion<0) return null;//si se pide una posición fuera del rango devuelve null
+		if (posicion>=this.count || posicion<0) return null;//si se pide una posiciÃ³n fuera del rango devuelve null
 		Node paso;
-		//Recorremos la lista hasta la posición recibida.
-		//Desde el principio o desde el final. Lo que esté más cerca
+		//Recorremos la lista hasta la posiciÃ³n recibida.
+		//Desde el principio o desde el final. Lo que estÃ© mÃ¡s cerca
 		if (posicion>this.count/2) {
 			paso=this.last;
 			for (int i=this.count-1; i>=posicion; i--) {
@@ -111,11 +134,12 @@ public class ListaDobEnl {
 		}		
 		return paso;
 	}
-	/*
+	/**
 	 * Elimina el primer nodo cuyo texto coincida
 	 * Devuelve el nodo eliminado o null si no lo ha encontrado
-	 */
+	 **/
 	public Node deleteNode(String texto) {
+		if (this.first==null)return null;
 		Node nodo=this.first;
 		while (nodo!=null) {
 			if (nodo.getText().equals(texto)) {
@@ -125,10 +149,10 @@ public class ListaDobEnl {
 		}
 		return null;
 	}
-	/*
-	 * Elimina el nodo en la posición indicada
+	/**
+	 * Elimina el nodo en la posiciÃ³n indicada
 	 * Devuleve el nodo eliminado
-	 */
+	 **/
 	public Node deleteNode(int pos) {
 		if (pos<0 || pos>=this.count) return null;
 		Node nodo=this.first;
@@ -138,39 +162,51 @@ public class ListaDobEnl {
 		deleteNode(nodo);
 		return nodo;
 	}
-	/*
+	/**
 	 * Elimina el nodo
-	 */
+	 **/
 	private void deleteNode(Node node) {
-		Node nodo = this.first;
-		for (int i=0; i<this.count;i++) {
-			if (nodo.equals(node)) {
-				//borrar
-				Node anterior,siguiente;
-				anterior = nodo.getPrev();
-				siguiente = nodo.getNext();
-				anterior.setNext(siguiente);
-				siguiente.setPrev(anterior);
-				this.count--;
-				break;
-			}else {
-				nodo=nodo.getNext();
+		if (node!=null) {
+			if (this.first!=null) {
+				Node nodo = this.first;
+				for (int i=0; i<this.count;i++) {
+					if (nodo.equals(node)) {
+						//borrar
+						Node anterior,siguiente;
+						anterior = nodo.getPrev();
+						siguiente = nodo.getNext();
+						anterior.setNext(siguiente);
+						siguiente.setPrev(anterior);
+						this.count--;
+						break;
+					}else {
+						nodo=nodo.getNext();
+					}
+				}
 			}
-		}
+		}		
+		
 	}
-	/*
-	 * Método de clase
+	/**
+	 * MÃ©todo de clase
 	 * Concatenar dos listas
 	 * Devuelve la lista resultante
-	 */
+	 **/
 	public static ListaDobEnl concat(ListaDobEnl lista1,ListaDobEnl lista2) {
-		ListaDobEnl lista = lista1;
-		Node nodo = lista2.getFirst();
+		//Creamos una nueva lista para no modificar las recibidas como parÃ¡metros
+		ListaDobEnl listaConcatenada = new ListaDobEnl();
+		Node nodo = lista1.getFirst();
 		while (nodo!=null) {
-			lista.addNode(nodo);
+			//AÃ±adimos un nuevo nodo con el mismo texto para no pasar el nodo como referencia con sus punteros
+			listaConcatenada.addNode(new Node(nodo.getText()));
 			nodo=nodo.getNext();
 		}
-		return lista;
+		nodo = lista2.getFirst();
+		while (nodo!=null) {
+			listaConcatenada.addNode(new Node(nodo.getText()));
+			nodo=nodo.getNext();
+		}
+		return listaConcatenada;
 	}
 	public void printList() {
 		Node nodo = this.first;
@@ -181,9 +217,9 @@ public class ListaDobEnl {
 			pos++;
 		}
 	}
-	/*
-	 * reemplaza el nodo que hay en la posición indicada por el nodo pasado como parámetro
-	 */
+	/**
+	 * reemplaza el nodo que hay en la posiciÃ³n indicada por el nodo pasado como parÃ¡metro
+	 **/
 	public void replace(int pos, Node nodo) {
 		this.deleteNode(pos);
 		this.addNode(pos, nodo);
