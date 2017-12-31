@@ -7,9 +7,9 @@ package arbolBinarioBusqueda;
  * @author Ruben Garabaya Arenas
  *
  */
-public class Node {
+public class Node implements Comparable{
 	private Object data;
-	private Node father,left,right;
+	private Node left,right;
 	
 	public Node(Object data) {
 		this.data = data;
@@ -25,23 +25,23 @@ public class Node {
 	/**
 	 * @param data the data to set
 	 */
-	public void setData(Object data) {
+	public void setData(Comparable<Object> data) {
 		this.data = data;
 	}
 
 	/**
 	 * @return the father
 	 */
-	public Node getFather() {
-		return father;
-	}
+//	public Node getFather() {
+//		return father;
+//	}
 
 	/**
 	 * @param father the father to set
 	 */
-	public void setFather(Node father) {
-		this.father = father;
-	}
+//	public void setFather(Node father) {
+//		this.father = father;
+//	}
 
 	/**
 	 * @return the left
@@ -70,6 +70,13 @@ public class Node {
 	public void setRight(Node right) {
 		this.right = right;
 	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		return ((Comparable<Object>)this.data).compareTo(((Node)o).getData());
+	}
+
 
 	
 }
