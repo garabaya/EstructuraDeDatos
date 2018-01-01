@@ -76,6 +76,13 @@ public class Node implements Comparable{
 		// TODO Auto-generated method stub
 		return ((Comparable<Object>)this.data).compareTo(((Node)o).getData());
 	}
+	
+	public int hasChild() {
+		int count=0;
+		if (this.getLeft()!=null) count++;
+		if (this.getRight()!=null) count++;
+		return count;
+	}
 
 
 	

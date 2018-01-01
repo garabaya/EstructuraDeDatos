@@ -15,13 +15,12 @@ public class Listin {
 	public static void main(String[] args) {
 		Abb arbol = new Abb("Pedro");
 		arbol.addNode("Pepe");
-		arbol.addNode("María");
-		arbol.addNode("Andrés");
 		arbol.addNode("Julio");
+		arbol.addNode("Andrés");
+		arbol.addNode("María");		
 		arbol.addNode("Juana");
-		//arbol.removeNode("Juana");
 		arbol.addNode("Teresa");
-		arbol.addNode("José");
+		arbol.addNode("Aitor");
 		arbol.addNode("Inma");
 		System.out.println("En postorden");
 		arbol.post().print();
@@ -29,13 +28,19 @@ public class Listin {
 		System.out.println("En inorden");
 		arbol.in().print();
 		System.out.println();
+		arbol.removeNode("Inma");
+		arbol.removeNode("Juana");
 		System.out.println("En preorden");
 		arbol.pre().print();
 		System.out.println();
-		if (arbol.searchNode("Pepe")) System.out.println("Pepe si está");
-		else System.out.println("Pepe no está");
-		if (arbol.searchNode("Juana")) System.out.println("Juana si está");
-		else System.out.println("Juana no está");
+		String buscado = "Pepe";
+		Object encontrado = arbol.searchNode(buscado);
+		if (encontrado!=null) System.out.println(encontrado + " si está");
+		else System.out.println(buscado + " no está");
+		buscado = "Juana";
+		encontrado = arbol.searchNode(buscado);
+		if (encontrado!=null) System.out.println(encontrado + " si está");
+		else System.out.println(buscado + " no está");
 	}
 
 }

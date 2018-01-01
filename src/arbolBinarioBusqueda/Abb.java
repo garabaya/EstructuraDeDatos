@@ -13,21 +13,28 @@ public class Abb {
 	public Abb(Object root) {
 		this.root=new Node(root);
 	}
-	
-	public boolean searchNode(Object elementToSearch) {
+	//Devuelve el objeto buscado o null si no lo encuentra
+	public Object searchNode(Object elementToSearch) {
 		Node nodeToSearch = new Node(elementToSearch);
+		Node nodeFound = this.searchNode(nodeToSearch);
+		if (nodeFound!=null)	return nodeFound.getData();
+		else return null;
+	}
+	//Devuelve el Nodo buscado o null si no lo encuentra
+	private Node searchNode(Node elementToSearch) {
 		boolean found=false;
 		Node position = this.root;
-		if (elementToSearch.getClass().equals(this.root.getData().getClass())) {
+		if (elementToSearch.getData().getClass().equals(this.root.getData().getClass())) {
 			while (position!=null && !found) {
-				if (position.compareTo(nodeToSearch)<0) {
+				if (position.compareTo(elementToSearch)<0) {
 					position=position.getRight();
-				}else if (position.compareTo(nodeToSearch)>0) {
+				}else if (position.compareTo(elementToSearch)>0) {
 					position=position.getLeft();
 				}else found=true;
 			}
-		}		
-		return found;
+		}
+		if (found) return position;
+		else return null;
 	}
 	
 	//Insertar un nodo al árbol
@@ -60,20 +67,29 @@ public class Abb {
 		return inserted;
 	}
 		
-	//Elimina un nodo si existe y devuelve true. Devuelve false si no existe
-	public boolean removeNode(Object objectToRemove) {
-		Node nodo = new Node(objectToRemove);
-		Boolean respuesta=false;
-		Node posicion = this.root;
-		while (posicion.compareTo(nodo)!=0 && posicion!=null) {
-			if (posicion.compareTo(nodo)>0) posicion=posicion.getRight();
-			else posicion=posicion.getLeft();
+	//Elimina un nodo y devuelve el nodo eliminado o null si no lo encuentra
+	public Object removeNode(Object objectToRemove) {
+		Node nodeToRemove = new Node(objectToRemove);
+		Node nodeFound = this.searchNode(nodeToRemove);
+		Object resp=null;
+		if (nodeFound!=null) {
+			resp = nodeFound.getData();
+			if (nodeFound.hasChild()==0){//Caso 1: No tiene hijos			
+				Node father = this.getFather(nodeFound);
+				if (father.compareTo(nodeFound)<0) father.setRight(null);
+				else father.setLeft(null);
+			}else if(nodeFound.hasChild()==1) {//Caso 2: Tiene 1 hijo
+				Node father = this.getFather(nodeFound);
+				Node child;
+				if (nodeFound.getLeft()!=null) child=nodeFound.getLeft();
+				else child=nodeFound.getRight();
+				if (father.compareTo(nodeFound)<0) father.setRight(child);
+				else father.setLeft(child);
+			}else System.out.println("No borrado");//Caso 3: Tiene 2 hijos TODO
 		}
-		if (posicion!=null) {
-			respuesta=true;
-			//TODO
-		}
-		return respuesta;
+		
+		
+		return resp;
 	}
 	
 	//Devuelve una lista con los nodos en preorden
@@ -127,9 +143,9 @@ public class Abb {
 		NodeList<Object> lista = new NodeList<Object>();
 		//Si hay nodo...
 		if (root2!=null) {//IDR
-			//añadimos la lista de nodos en inorden de la rama izquierda
+			//añadimos la lista de nodos en postorden de la rama izquierda
 			if (root2.getLeft()!=null) lista.addAll(post(root2.getLeft()));
-			//añadimos la lista de nodos en inorden de la rama derecha
+			//añadimos la lista de nodos en postorden de la rama derecha
 			if (root2.getRight()!=null) lista.addAll(post(root2.getRight()));
 			//Añadimos el nodo raiz a la lista
 			lista.add(root2.getData());
@@ -137,5 +153,20 @@ public class Abb {
 		}
 		return lista;
 	}
-
+	//Para eliminar un nodo necesitamos saber quien es su padre
+	private Node getFather(Node child) {
+		boolean found=false;
+		Node position = this.root;
+		Node father = null;		
+		while (position!=null && !found) {
+			if (position.compareTo(child)<0) {
+				father = position;
+				position=position.getRight();
+			}else if (position.compareTo(child)>0) {
+				father=position;
+				position=position.getLeft();
+			}else found=true;		}
+		
+		return father;
+	}
 }
