@@ -7,41 +7,27 @@ package arbolBinarioBusqueda;
  * @author Ruben Garabaya Arenas
  *
  */
-public class Node implements Comparable{
-	private Object data;
+public class Node {
+	private Comparable<Object> data;
 	private Node left,right;
 	
-	public Node(Object data) {
+	public <T extends Comparable> Node(T data) {
 		this.data = data;
 	}
 
 	/**
 	 * @return the data
 	 */
-	public Object getData() {
+	public Comparable getData() {
 		return data;
 	}
 
 	/**
 	 * @param data the data to set
 	 */
-	public void setData(Comparable<Object> data) {
+	public <T extends Comparable> void setData(T data) {
 		this.data = data;
 	}
-
-	/**
-	 * @return the father
-	 */
-//	public Node getFather() {
-//		return father;
-//	}
-
-	/**
-	 * @param father the father to set
-	 */
-//	public void setFather(Node father) {
-//		this.father = father;
-//	}
 
 	/**
 	 * @return the left
@@ -70,11 +56,8 @@ public class Node implements Comparable{
 	public void setRight(Node right) {
 		this.right = right;
 	}
-
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return ((Comparable<Object>)this.data).compareTo(((Node)o).getData());
+	public int compareTo(Node node) {
+		return (this.data.compareTo(node.getData()));
 	}
 	
 	public int hasChild() {

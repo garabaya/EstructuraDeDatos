@@ -10,11 +10,11 @@ package arbolBinarioBusqueda;
 public class Abb {
 	private Node root;
 	
-	public Abb(Object root) {
+	public <T extends Comparable> Abb(T root) {
 		this.root=new Node(root);
 	}
 	//Devuelve el objeto buscado o null si no lo encuentra
-	public Object searchNode(Object elementToSearch) {
+	public <T extends Comparable> Object searchNode(T elementToSearch) {
 		Node nodeToSearch = new Node(elementToSearch);
 		Node nodeFound = this.searchNode(nodeToSearch);
 		if (nodeFound!=null)	return nodeFound.getData();
@@ -39,7 +39,7 @@ public class Abb {
 	
 	//Insertar un nodo al árbol
 	//Devuelve si se ha insertado
-	public boolean addNode(Object elementToInsert) {
+	public <T extends Comparable> boolean addNode(T elementToInsert) {
 		Node nodeToInsert = new Node(elementToInsert);
 		boolean inserted=true;
 		if (!elementToInsert.getClass().equals(this.root.getData().getClass())){
@@ -68,24 +68,33 @@ public class Abb {
 	}
 		
 	//Elimina un nodo y devuelve el nodo eliminado o null si no lo encuentra
-	public Object removeNode(Object objectToRemove) {
+	public <T extends Comparable> Object removeNode(T objectToRemove) {
 		Node nodeToRemove = new Node(objectToRemove);
 		Node nodeFound = this.searchNode(nodeToRemove);
 		Object resp=null;
 		if (nodeFound!=null) {
 			resp = nodeFound.getData();
-			if (nodeFound.hasChild()==0){//Caso 1: No tiene hijos			
-				Node father = this.getFather(nodeFound);
+			Node father = this.getFather(nodeFound);
+			if (nodeFound.hasChild()==0){//Caso 1: No tiene hijos
 				if (father.compareTo(nodeFound)<0) father.setRight(null);
 				else father.setLeft(null);
 			}else if(nodeFound.hasChild()==1) {//Caso 2: Tiene 1 hijo
-				Node father = this.getFather(nodeFound);
 				Node child;
 				if (nodeFound.getLeft()!=null) child=nodeFound.getLeft();
 				else child=nodeFound.getRight();
 				if (father.compareTo(nodeFound)<0) father.setRight(child);
 				else father.setLeft(child);
-			}else System.out.println("No borrado");//Caso 3: Tiene 2 hijos TODO
+			}else {//Caso 3: Tiene 2 hijos
+				Node leftChild = nodeFound.getRight();//Por la rama derecha buscamos la hoja izquierda
+				while (leftChild.getLeft()!=null) {
+					leftChild=leftChild.getLeft();
+				}
+				Node grandpa = this.getFather(leftChild);//Hay que guardar quien es el padre del nodo que hay que subir antes de hacerlo.
+				//Paso 1: Copiar los datos del último hijo de la rama izq. en el nodo a borrar
+				nodeFound.setData(leftChild.getData());
+				//Paso 2: El padre del último hijo(abuelo) de la rama izquierda debe apuntar al hijo derecho(nieto) si lo tiene (hijo izquierdo no puede tener)
+				grandpa.setLeft(leftChild.getRight());				
+			}
 		}
 		
 		
